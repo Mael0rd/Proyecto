@@ -1,0 +1,187 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id                Int          @id @default(autoincrement())
+  nombre            String
+  apellidos         String
+  correo            String       @unique
+  password          String
+  rol               Rol?
+  ordenes           Orden?
+  movimientos       Movimientos?
+  inventarios       Inventario?
+  traslados         Traslado?
+  bodegasEncargadas Bodega?
+}
+
+model Rol {
+  id          Int     @id @default(autoincrement())
+  descripcion String
+  usuario     Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId   Int     @unique
+}
+
+model Orden {
+  id            Int      @id @default(autoincrement())
+  fechaCreacion DateTime @default(now())
+
+  proovedorId Int
+  proovedor   Proovedor @relation(fields: [proovedorId], references: [id])
+
+  bodegaId Int
+  bodega   Bodega @relation(fields: [bodegaId], references: [id])
+
+  productoId Int
+  producto   Producto @relation(fields: [productoId], references: [id])
+
+  fechaRecibida DateTime @default(now())
+
+  usuarioId Int     @unique
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  cantidad  Int
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+//proovedores
+model Proovedor {
+  id               Int        @id @default(autoincrement())
+  nombre           String
+  correo           String     @unique
+  numeroTelefonico String
+  //Ubicacion
+  ubicacionId      Int?       @unique
+  ubicacion        Ubicacion? @relation(fields: [ubicacionId], references: [id])
+  direccionExacta  String
+  ordenes          Orden[]
+}
+
+model Producto {
+  id           Int           @id @default(autoincrement())
+  nombre       String
+  descripcion  String        @db.VarChar(500)
+  precio       Decimal       @db.Decimal(10, 2)
+  subCategoria SubCategoria?
+  cilindraje   String        @db.VarChar(500)
+  tipoLLanta   String        @db.VarChar(500)
+  cantidad     Int
+  inventarioId Int?
+  inventario   Inventario?   @relation(fields: [inventarioId], references: [id])
+  ordenes      Orden[]
+  bodegas      Bodega[]
+  movimientos  Movimientos?
+}
+
+model SubCategoria {
+  id          Int        @id @default(autoincrement())
+  descripcion String
+  producto    Producto   @relation(fields: [productoId], references: [id])
+  productoId  Int        @unique
+  categoria   Categoria?
+}
+
+model Categoria {
+  id             Int          @id @default(autoincrement())
+  descripcion    String
+  subCategoria   SubCategoria @relation(fields: [subCategoriaId], references: [id])
+  subCategoriaId Int          @unique
+}
+
+model Inventario {
+  id Int @id @default(autoincrement())
+
+  //debe de tener relacion con producto y bodega?
+  productos     Producto[] //esta hay que quitar
+  //registros
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @default(now()) @updatedAt
+  usuarioId     Int        @unique
+  usuario       Usuario    @relation(fields: [usuarioId], references: [id])
+  justificacion String
+  //cantidades
+  cantMax       Int
+  cantMin       Int
+  cantStock     Int
+  bodegas       Bodega[]
+}
+
+model Ubicacion {
+  id              Int        @id @default(autoincrement())
+  nombre          String
+  provincia       String
+  canton          String
+  distrito        String
+  direccionExacta String
+  bodegas         Bodega[]
+  proovedores     Proovedor?
+}
+
+model Bodega {
+  id           Int          @id @default(autoincrement())
+  nombre       String
+  dimensiones  String
+  capacidad    String
+  seguro       String
+  //Ubicacion
+  ubicacionId  Int?         @unique
+  ubicacion    Ubicacion?   @relation(fields: [ubicacionId], references: [id])
+  //ordenCompra
+  orden        Orden[]
+  movimientos  Movimientos?
+  //Inventario
+  inventarioId Int
+  inventario   Inventario   @relation(fields: [inventarioId], references: [id])
+  //
+  producto     Producto     @relation(fields: [productoId], references: [id])
+  productoId   Int          @unique
+
+  trasladoOrigen  Traslado[] @relation("TrasladosOrigen")
+  trasladoDestino Traslado[] @relation("TrasladosDestino")
+
+  usuarioId       Int      @unique
+  usuario         Usuario  @relation(fields: [usuarioId], references: [id])
+}
+
+//mae esta parte es la que me come se que estas tablas van eliminando las intermedias 
+//y usando estas o uniendolas en una sola que creo que seria lo correcto
+
+model Movimientos {
+  id              Int      @id @default(autoincrement())
+  tipoMovimiento  String //entrada, salida, ajuste
+  fechaMovimiento DateTime @default(now()) @updatedAt
+  justificacion   String
+  usuarioId       Int      @unique
+  usuario         Usuario  @relation(fields: [usuarioId], references: [id])
+  bodegaId        Int      @unique
+  bodega          Bodega   @relation(fields: [bodegaId], references: [id])
+  producto        Producto @relation(fields: [productoId], references: [id])
+  productoId      Int      @unique
+  cantidad        Int
+}
+
+model Traslado {
+  id       Int @id @default(autoincrement())
+  cantidad Int
+
+  usuarioId Int     @unique
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  fechaEnvio    DateTime @default(now()) @updatedAt
+  fechaRecibido DateTime @default(now()) @updatedAt
+
+  bodegaOrigen  Bodega? @relation(name: "TrasladosOrigen", fields: [bodegaDestinoId], references: [id])
+  bodegaDestino Bodega? @relation(name: "TrasladosDestino", fields: [bodegaOrigenId], references: [id])
+
+  bodegaOrigenId  Int
+  bodegaDestinoId Int
+}
