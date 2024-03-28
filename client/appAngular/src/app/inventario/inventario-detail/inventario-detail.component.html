@@ -1,0 +1,24 @@
+@if(datos){
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h2>Inventario del producto: {{ datos.producto.nombre }}</h2>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p><b>Codigo:</b> {{ datos.producto.codigo }}</p>
+    <p><b>Descripcion:</b> {{ datos.producto.descripcion }}</p>
+    <p><b>Precio:</b> {{ datos.producto.precio }}</p>
+    <p><b>Cilindraje:</b> {{ datos.producto.cilindraje }}</p>
+    <p><b>Bodega:</b> {{ datos.bodega.nombre }}</p>
+    <p><b>Cantidad disponible:</b> {{ datos.cantStock }}</p>
+    <p><b>Cantidad minima de existencias:</b> {{ datos.cantMax }}</p>
+    <p><b>Cantidad maxima de existencias:</b> {{ datos.cantMin }}</p>
+    <p><b>Usuario que registra:</b> {{ datos.usuarioregistraId }}</p>
+    <p><b>Usuario que modifico por ultima vez:</b> {{ datos.usuarioActualizaId }}</p>
+  </mat-card-content>
+  <mat-card-title>
+  </mat-card-title>
+
+</mat-card>
+}

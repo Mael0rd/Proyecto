@@ -1,0 +1,102 @@
+<mat-card class="full-width">
+  <!-- Titulo del Card -->
+  <mat-card-title>
+    
+  <a
+  mat-fab
+  matTooltip="Crear Orden"
+  aria-label="Crear Orden"
+  color="primary"
+  >
+  <mat-icon>add</mat-icon>
+  
+  </a>
+  <a
+  mat-fab
+  matTooltip="Imrpimir Orden"
+  aria-label="Imprimir Orden"
+  color="primary"
+  >
+  <button 
+        mat-mini-fab
+        color="accent"
+        matTooltip="Detalle Inventario"
+        aria-label="Detalle Inventario"
+        color="primary"
+        (click)="onImprimir()"
+      >
+      <mat-icon class="mat-18">print</mat-icon>
+    </button>
+  
+  </a>
+  </mat-card-title>
+  <mat-card-content>
+ <!-- Table -->
+ <div class="mat-elevation-z8">
+  <table id="miTabla" mat-table class="full-width-table" 
+  [dataSource]="dataSource"
+  matSort aria-label="Elements">
+
+  
+  <!-- Nombre del producto -->
+  <ng-container matColumnDef="producto.nombre">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del producto</th>
+    <td mat-cell *matCellDef="let row">{{ row.producto.nombre }}</td>
+  </ng-container>
+
+  <!-- Nombre de la bodega -->
+  <ng-container matColumnDef="bodega.nombre">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Bodega</th>
+    <td mat-cell *matCellDef="let row">{{ row.bodega.nombre }}</td>
+  </ng-container>
+
+  <!-- Cantidad disponible -->
+  <ng-container matColumnDef="cantStock">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad disponible</th>
+    <td mat-cell *matCellDef="let row">{{ row.cantStock }}</td>
+  </ng-container>
+
+  <!-- Precio del producto -->
+  <ng-container matColumnDef="precio">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio</th>
+    <td mat-cell *matCellDef="let row">{{ row.producto.precio | currency : "₡"}}</td>
+  </ng-container>
+  
+     <!-- Acciones Column -->
+     <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Acciones</th>
+      <td mat-cell *matCellDef="let row">
+        <button 
+        mat-mini-fab
+        color="accent"
+        matTooltip="Detalle Inventario"
+        aria-label="Detalle Inventario"
+        color="primary"
+        (click)="detalleInventario(row.id)"
+      >
+      <mat-icon class="mat-18">info</mat-icon>
+    </button>
+    
+      </td>
+      
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator
+    #paginator
+    [length]="dataSource.data.length"
+    [pageIndex]="0"
+    [pageSize]="3"
+    [pageSizeOptions]="[3, 5, 10]"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>
+
+<!-- Table -->
+  </mat-card-content>
+  </mat-card>
+  

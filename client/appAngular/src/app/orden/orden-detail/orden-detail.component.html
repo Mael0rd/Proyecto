@@ -1,0 +1,88 @@
+<button mat-icon-button class="print-button" (click)="print()">
+  <mat-icon class="print-icon">print</mat-icon>
+</button>
+
+<div *ngIf="datos" class="factura">
+  <h2 class="factura-title">Orden #{{ datos.id }}</h2>
+  <table>
+
+    <td>
+      <div class="factura">
+        <h2 class="proveedor-name">Motos CR</h2>
+        <div>
+          <p><b>Solicitante:</b>
+            <br>
+            {{ datos.usuario.nombre }} {{ datos.usuario.apellidos }}
+          </p>
+          <p>{{datos.usuario.correo}}</p>
+          <p>Administrador</p>
+        </div>
+      </div>
+    </td>
+
+    <td>
+      <div class="factura">
+        <h2 class="proveedor-name">Proovedor: {{ datos.proovedor.nombre }}</h2>
+        <div>
+          <p>{{datos.proovedor.correo}}</p>
+          <p>{{datos.proovedor.numeroTelefonico}}</p>
+          <p>{{datos.proovedor.direccionExacta}}</p>
+
+        </div>
+      </div>
+    </td>
+
+  </table>
+
+
+  <div class="linea-horizontal"></div>
+
+
+
+  <div class="factura-content">
+
+    <div class="factura-details">
+      <p><b>Entregar en bodega: </b>{{ datos.bodega.nombre }}</p>
+      <p><b>Fecha de creación:</b>{{ datos.fechaCreacion | date: 'dd/MM/yyyy' }}</p>
+      <p><b>Fecha de recibida: </b>{{ datos.fechaRecibida | date: 'dd/MM/yyyy' }}</p>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="linea-horizontal"></div>
+  <div class="pedido-content">
+    <div class="producto-item">
+      <h2><b>Producto(s):</b></h2>
+
+      <td>
+        <div class="factura">
+          <ul *ngIf="datos.productos">
+            <li *ngFor="let item of datos.productos"><a [routerLink]="['/producto/', item.productoId]">Producto : {{
+                item.producto.nombre }} Cantidad: {{ item.cantidad }}</a></li>
+          </ul>
+        </div>
+      </td>
+      <td>
+        <div class="factura">
+          <ul *ngIf="datos.productos">
+            <li *ngFor="let item of datos.productos"><a> Cantidad: {{ item.cantidad }}</a></li>
+
+          </ul>
+          <p>Total de productos: {{ totalCantidadProductos }}</p>
+        </div>
+      </td>
+    </div>
+  </div>
+  <div class="factura-footer">
+    <p> Autorizado mediante la resolución DGT-R-033-2019 del veinte de junio de dos mil diecinueve de la Dirección
+      General de Tributación.
+    </p>
+    <p> Generada por LRH , www.facturaelectronicalencho.cr</p>
+    <p> Versión del Documento Electrónico: 1.5
+    </p>
+
+  </div>
+</div>

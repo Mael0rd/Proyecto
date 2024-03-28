@@ -1,0 +1,25 @@
+.footer {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    color: white !important;
+  }
+  
+  .container {
+    margin: 0 auto;
+  }
+  
+  .title {
+    flex: 1 1 auto;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .divider {
+    width: 100%;
+    border: none;
+    border-top: 1px solid white;
+    margin: 0px;
+  }
+  

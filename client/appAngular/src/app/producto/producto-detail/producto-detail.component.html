@@ -1,0 +1,25 @@
+@if(datos){
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ datos.nombre }} </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="price">{{ datos.precio | currency : "USD" }}</p>
+        <p>{{ datos.codigo }}</p>
+        <p>{{ datos.nombre }}</p>
+        <p>{{ datos.descripcion }}</p>
+        <p>{{ datos.precio }}</p>
+        <p>{{ datos.cantidad }}</p>
+        @if(datos.subcategoria) {
+        <mat-chip-listbox aria-label="subcategoria">
+          @for (item of datos.subcategoria; track item.id) {
+          <mat-chip-option color="accent" selected>
+            {{ item.nombre }}
+          </mat-chip-option>
+          }
+        </mat-chip-listbox>
+        }
+      </mat-card-content>
+    </mat-card>
+    }
+    

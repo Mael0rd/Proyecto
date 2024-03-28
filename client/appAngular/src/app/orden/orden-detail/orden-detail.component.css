@@ -1,0 +1,47 @@
+.factura {
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px;
+  background-color: #fff;
+}
+
+.factura-header,
+.factura-content{
+  padding: 10px;
+}
+
+.factura-footer {
+  padding: 10px;
+  text-align: center;
+}
+
+.linea-horizontal {
+  border-top: 1px solid #000;
+  margin: 10px 0;
+}
+
+.proveedor-name {
+  margin-bottom: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.proveedor-name,
+.proveedor-img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.proveedor-img {
+  display: inline-block;
+  vertical-align: middle;
+  width: 50px; 
+  height: auto; 
+  float: right; 
+  margin-left: 10px;
+}
+
+
+
+

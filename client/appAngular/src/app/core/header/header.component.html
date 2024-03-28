@@ -1,0 +1,57 @@
+<mat-toolbar color="primary">
+  <button [matMenuTriggerFor]="menu1" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Motos CR</span>
+  <!-- 
+      https://material.angular.io/components/menu/overview
+      nested menu
+  -->
+  <mat-menu #menu1="matMenu">
+    <button mat-menu-item [routerLink]="['/inicio']" routerLinkActive="link-active" >Inicio</button>
+    <!-- <button mat-menu-item [routerLink]="['/acerca-de']" routerLinkActive="link-active" >Acerca de</button> -->
+    <button mat-menu-item [routerLink]="['/producto']" routerLinkActive="link-active" >Productos</button>
+    <button mat-menu-item  [matMenuTriggerFor]="menu2"
+    routerLinkActive="link-active">
+    Mantenimientos
+  </button>
+  <button mat-menu-item [routerLink]="['#']" routerLinkActive="link-active" >Traslados</button>
+  <button mat-menu-item [routerLink]="['#']" routerLinkActive="link-active" >Salidas de inventario</button>
+  <button mat-menu-item [routerLink]="['#']" routerLinkActive="link-active" >Ajustes de inventario</button>
+
+  <mat-menu #menu2="matMenu">
+    <button mat-menu-item  [routerLink]="'/producto-table'" [routerLinkActive]="'link-active'">Productos</button>
+    <button mat-menu-item [routerLink]="'/orden/'" [routerLinkActive]="'link-active'">Ordenes</button>
+    <button mat-menu-item [routerLink]="'/inventario/2'" [routerLinkActive]="'link-active'">Inventario</button>
+    <button mat-menu-item [routerLink]="'/proovedor'" [routerLinkActive]="'link-active'">Proovedores</button>
+  </mat-menu>
+  </mat-menu>
+  <!--enlaces de la app-->
+  <!-- https://fonts.google.com/icons -->
+  <!--https://material.angular.io/guide/typography-->
+  <div class="example-spacer"></div>
+  <div class="example-spacer">
+    <button mat-icon-button matBadgeColor="accent" [matBadge]="qtyItems.toString()" [routerLink]="'/orden'" [routerLinkActive]="'link-active'">
+      <mat-icon>shopping_cart</mat-icon>
+    </button>
+    <!-- Menu de Usuario-->
+    <span class="mat-caption" *ngIf="isAutenticated">{{currentUser.email}}</span>
+    <button mat-icon-button [matMenuTriggerFor]="menu3">
+      <mat-icon [ngStyle]="{'color': isAutenticated ? 'white': 'orange'}" >person</mat-icon>
+    </button>
+    <mat-menu #menu3="matMenu" >
+      @if(!isAutenticated){
+        <button mat-menu-item (click)="login()">          
+          <mat-icon>person_add</mat-icon>
+          <span>Login</span>
+        </button> 
+      }@else{
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>person_remove</mat-icon>
+          <span>Logout</span>
+        </button>
+      }     
+      
+    </mat-menu>
+  </div>
+</mat-toolbar>
