@@ -11,27 +11,42 @@ datasource db {
 }
 
 model Usuario {
-  id                Int          @id @default(autoincrement())
-  nombre            String
-  apellidos         String
-  correo            String       @unique
-  password          String
-  rol               Rol?
-  ordenes           Orden?
-  movimientos       Movimientos?
-  inventarios       Inventario?
-  traslados         Traslado?
-  bodegasEncargadas Bodega?
+  id          Int             @id @default(autoincrement())
+  nombre      String
+  apellidos   String
+  correo      String
+  password    String
+  role        Role            @default(USER)
+  ordenes     OrdenCompra[]
+  movimientos Movimientos?
+  traslados   TrasladoBodega?
+
+  bodegas Bodega[]
+
+  UsuarioRegistra  Inventario[] @relation("UsuarioRegistra")
+  UsuarioActualiza Inventario[] @relation("UsuarioActualiza")
 }
 
-model Rol {
-  id          Int     @id @default(autoincrement())
+enum Role {
+  USER
+  ADMIN
+}
+
+model SubCategoria {
+  id          Int        @id @default(autoincrement())
+  categoriaId Int?
+  categoria   Categoria? @relation(fields: [categoriaId], references: [id])
   descripcion String
-  usuario     Usuario @relation(fields: [usuarioId], references: [id])
-  usuarioId   Int     @unique
+  productos   Producto[]
 }
 
-model Orden {
+model Categoria {
+  id            Int            @id @default(autoincrement())
+  descripcion   String
+  subCategorias SubCategoria[]
+}
+
+model OrdenCompra {
   id            Int      @id @default(autoincrement())
   fechaCreacion DateTime @default(now())
 
@@ -41,78 +56,95 @@ model Orden {
   bodegaId Int
   bodega   Bodega @relation(fields: [bodegaId], references: [id])
 
-  productoId Int
-  producto   Producto @relation(fields: [productoId], references: [id])
+  productos OrdenOnProducto[]
 
   fechaRecibida DateTime @default(now())
 
-  usuarioId Int     @unique
+  usuarioId Int
   usuario   Usuario @relation(fields: [usuarioId], references: [id])
 
   cantidad  Int
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("Orden")
+}
+
+model OrdenOnProducto {
+  cantidad    Int
+  ordencompra OrdenCompra @relation(fields: [ordenId], references: [id])
+  ordenId     Int
+  productoId  Int
+  producto    Producto    @relation(fields: [productoId], references: [id])
+
+  @@id([productoId, ordenId])
 }
 
 //proovedores
 model Proovedor {
-  id               Int        @id @default(autoincrement())
+  id               Int           @id @default(autoincrement())
   nombre           String
-  correo           String     @unique
+  correo           String        
   numeroTelefonico String
   //Ubicacion
-  ubicacionId      Int?       @unique
-  ubicacion        Ubicacion? @relation(fields: [ubicacionId], references: [id])
+  ubicacionId      Int?          @unique
+  ubicacion        Ubicacion?    @relation(fields: [ubicacionId], references: [id])
   direccionExacta  String
-  ordenes          Orden[]
+  ordenes          OrdenCompra[]
 }
 
 model Producto {
-  id           Int           @id @default(autoincrement())
-  nombre       String
-  descripcion  String        @db.VarChar(500)
-  precio       Decimal       @db.Decimal(10, 2)
-  subCategoria SubCategoria?
-  cilindraje   String        @db.VarChar(500)
-  tipoLLanta   String        @db.VarChar(500)
-  cantidad     Int
-  inventarioId Int?
-  inventario   Inventario?   @relation(fields: [inventarioId], references: [id])
-  ordenes      Orden[]
-  bodegas      Bodega[]
-  movimientos  Movimientos?
+  id             Int                    @id @default(autoincrement())
+  codigo         String
+  nombre         String
+  descripcion    String                 @db.VarChar(500)
+  precio         Decimal                @db.Decimal(10, 2)
+  subCategoria   SubCategoria?          @relation(fields: [subCategoriaId], references: [id])
+  subCategoriaId Int?
+  cilindraje     String                 @db.VarChar(500)
+  tipoLLanta     String                 @db.VarChar(500)
+  cantidad       Int
+  ordenes        OrdenOnProducto[]
+  bodegas        Inventario[]
+  movimientos    MovimientoOnProducto[]
+  traslados TrasladoOnProducto[]
+}
+ 
+model MovimientoOnProducto {
+  movimientoId Int
+  movimiento   Movimientos @relation(fields: [movimientoId], references: [id])
+  productoId   Int
+  producto     Producto    @relation(fields: [productoId], references: [id])
+
+  cantidad Int
+
+  @@id([movimientoId, productoId])
+  @@map("MovimientoProducto")
 }
 
-model SubCategoria {
-  id          Int        @id @default(autoincrement())
-  descripcion String
-  producto    Producto   @relation(fields: [productoId], references: [id])
-  productoId  Int        @unique
-  categoria   Categoria?
-}
 
-model Categoria {
-  id             Int          @id @default(autoincrement())
-  descripcion    String
-  subCategoria   SubCategoria @relation(fields: [subCategoriaId], references: [id])
-  subCategoriaId Int          @unique
-}
 
 model Inventario {
   id Int @id @default(autoincrement())
 
-  //debe de tener relacion con producto y bodega?
-  productos     Producto[] //esta hay que quitar
-  //registros
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @default(now()) @updatedAt
-  usuarioId     Int        @unique
-  usuario       Usuario    @relation(fields: [usuarioId], references: [id])
-  justificacion String
+  bodegaId Int
+  bodega   Bodega @relation(fields: [bodegaId], references: [id])
+
+  productoId Int
+  producto   Producto @relation(fields: [productoId], references: [id]) // Corregido el campo a productoId
+
+  //createdAt DateTime @default(now())
+  //updatedAt DateTime @default(now()) @updatedAt
+
+  usuarioregistraId  Int
+  usuarioActualizaId Int
+
+  usuarioregistra  Usuario? @relation(name: "UsuarioRegistra", fields: [usuarioregistraId], references: [id])
+  usuarioActualiza Usuario? @relation(name: "UsuarioActualiza", fields: [usuarioActualizaId], references: [id])
+
   //cantidades
-  cantMax       Int
-  cantMin       Int
-  cantStock     Int
-  bodegas       Bodega[]
+  cantMax   Int
+  cantMin   Int
+  cantStock Int
 }
 
 model Ubicacion {
@@ -127,51 +159,53 @@ model Ubicacion {
 }
 
 model Bodega {
-  id           Int          @id @default(autoincrement())
-  nombre       String
-  dimensiones  String
-  capacidad    String
-  seguro       String
+  id          Int           @id @default(autoincrement())
+  nombre      String
+  dimensiones String
+  capacidad   String
+  seguro      Boolean
   //Ubicacion
-  ubicacionId  Int?         @unique
-  ubicacion    Ubicacion?   @relation(fields: [ubicacionId], references: [id])
+  ubicacionId Int?          @unique
+  ubicacion   Ubicacion?    @relation(fields: [ubicacionId], references: [id])
   //ordenCompra
-  orden        Orden[]
-  movimientos  Movimientos?
-  //Inventario
-  inventarioId Int
-  inventario   Inventario   @relation(fields: [inventarioId], references: [id])
-  //
-  producto     Producto     @relation(fields: [productoId], references: [id])
-  productoId   Int          @unique
+  orden       OrdenCompra[]
+  movimientos Movimientos?
+  //producto
+  //producto     Producto     @relation(fields: [productoId], references: [id])
+  //productoId   Int          @unique
+  productos   Inventario[]
 
-  trasladoOrigen  Traslado[] @relation("TrasladosOrigen")
-  trasladoDestino Traslado[] @relation("TrasladosDestino")
+  trasladoOrigen  TrasladoBodega[] @relation("TrasladosOrigen")
+  trasladoDestino TrasladoBodega[] @relation("TrasladosDestino")
 
-  usuarioId       Int      @unique
-  usuario         Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarios Usuario[]
 }
-
-//mae esta parte es la que me come se que estas tablas van eliminando las intermedias 
-//y usando estas o uniendolas en una sola que creo que seria lo correcto
 
 model Movimientos {
-  id              Int      @id @default(autoincrement())
+  id              Int                    @id @default(autoincrement())
   tipoMovimiento  String //entrada, salida, ajuste
-  fechaMovimiento DateTime @default(now()) @updatedAt
+  fechaMovimiento DateTime               @default(now()) @updatedAt
   justificacion   String
-  usuarioId       Int      @unique
-  usuario         Usuario  @relation(fields: [usuarioId], references: [id])
-  bodegaId        Int      @unique
-  bodega          Bodega   @relation(fields: [bodegaId], references: [id])
-  producto        Producto @relation(fields: [productoId], references: [id])
-  productoId      Int      @unique
-  cantidad        Int
+  usuarioId       Int                    @unique
+  usuario         Usuario                @relation(fields: [usuarioId], references: [id])
+  bodegaId        Int                    @unique
+  bodega          Bodega                 @relation(fields: [bodegaId], references: [id])
+  productos       MovimientoOnProducto[]
 }
 
-model Traslado {
-  id       Int @id @default(autoincrement())
+model TrasladoOnProducto {
   cantidad Int
+  productoId Int
+  producto   Producto @relation(fields: [productoId], references: [id])
+  trasladoId Int
+  traslado   TrasladoBodega @relation(fields: [trasladoId], references: [id])
+  @@id([trasladoId, productoId])
+}
+
+model TrasladoBodega {
+  id Int @id @default(autoincrement())
+
+  Productos TrasladoOnProducto[]
 
   usuarioId Int     @unique
   usuario   Usuario @relation(fields: [usuarioId], references: [id])
@@ -184,4 +218,6 @@ model Traslado {
 
   bodegaOrigenId  Int
   bodegaDestinoId Int
+
+  @@map("Traslado")
 }
