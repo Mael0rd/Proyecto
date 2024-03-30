@@ -1,75 +1,107 @@
 <form [formGroup]="proovedorForm" (ngSubmit)="submitProovedor()" novalidate>
-    <input type="hidden" formControlName="id" />
-    <mat-card class="shipping-card, margen-form">
-      <mat-card-header>
-        <mat-card-title>{{titleForm}} Proovedor</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="row">
-            
-          <div class="col">
-            <mat-form-field class="full-width">
-              <mat-label>Nombre</mat-label>
-              <input matInput formControlName="nombre" maxlength="20" placeholder="Nombre">
-              <mat-hint align="end"></mat-hint>
-              @if (errorHandling('nombre')) {
-              <mat-error>
-                {{errorHandling('nombre')}}
-              </mat-error>
-              }
-            </mat-form-field>
-          </div>
+  <input type="hidden" formControlName="id" />
+  <mat-card class="shipping-card, margen-form">
+    <mat-card-header>
+      <mat-card-title>{{titleForm}} Proovedor</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" maxlength="20" placeholder="Nombre">
+            <mat-hint align="end"></mat-hint>
+            @if (errorHandling('nombre')) {
+            <mat-error>
+              {{errorHandling('nombre')}}
+            </mat-error>
+            }
+          </mat-form-field>
         </div>
-  
-        <!-- 2da linea -->
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="full-width">
-              <mat-label>Correo</mat-label>
-              <input matInput formControlName="correo" placeholder="Correo">
-              @if (errorHandling('correo')) {
-              <mat-error>
-                {{errorHandling('correo')}}
-              </mat-error>
-              }
-  
-            </mat-form-field>
-          </div>
-               
+      </div>
+
+      <!-- 2da linea -->
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Correo</mat-label>
+            <input matInput formControlName="correo" placeholder="Correo">
+            @if (errorHandling('correo')) {
+            <mat-error>
+              {{errorHandling('correo')}}
+            </mat-error>
+            }
+
+          </mat-form-field>
         </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="full-width">
-              <mat-label>Telefono</mat-label>
-              <input matInput formControlName="numeroTelefonico" placeholder="Telefono">
-              @if (errorHandling('numeroTelefonico')) {
-              <mat-error>
-                {{errorHandling('numeroTelefonico')}}
-              </mat-error>
-              }
-  
-            </mat-form-field>
-          </div>
-          <div class="col">
-            <mat-form-field class="full-width">
-              <mat-label>Direccion Exacta</mat-label>
-              <input matInput formControlName="direccionExacta" placeholder="Direccion Exacta">
-              @if (errorHandling('direccionExacta')) {
-              <mat-error>
-                {{errorHandling('direccionExacta')}}
-              </mat-error>
-              }
-            </mat-form-field>
-          </div>
+
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Direccion Exacta</mat-label>
+            <input matInput formControlName="direccionExacta" placeholder="Direccion Exacta">
+            @if (errorHandling('direccionExacta')) {
+            <mat-error>
+              {{errorHandling('direccionExacta')}}
+            </mat-error>
+            }
+          </mat-form-field>
         </div>
-  
-      </mat-card-content>
-      <mat-card-actions>
-        <div class="example-button-row">
-          <button mat-raised-button color="warn" (click)="onReset()">Reset</button>
-          <button mat-raised-button color="primary" (click)="onBack()">Regresar</button>
-          <button mat-raised-button color="accent" type="submit">Guardar</button>
+
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Telefono</mat-label>
+            <input matInput formControlName="numeroTelefonico" placeholder="Telefono">
+            @if (errorHandling('numeroTelefonico')) {
+            <mat-error>
+              {{errorHandling('numeroTelefonico')}}
+            </mat-error>
+            }
+
+          </mat-form-field>
         </div>
-      </mat-card-actions>
-    </mat-card>
-  </form>
+
+        <!-- nuevos combos de provincias -->
+        <mat-form-field>
+          <mat-label>Provincia</mat-label>
+          <mat-select formControlName="provincia" (selectionChange)="onProvinciaChange()">
+            <mat-option *ngFor="let provincia of provincias | keyvalue" [value]="provincia.key">
+              {{ provincia.value.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Cantón</mat-label>
+          <mat-select formControlName="canton" (selectionChange)="onCantonChange()">
+            <mat-option *ngFor="let canton of cantones | keyvalue" [value]="canton.key">
+              {{ canton.value.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Distrito</mat-label>
+          <mat-select formControlName="distrito">
+            <mat-option *ngFor="let distrito of distritos | keyvalue" [value]="distrito.key">
+              {{ distrito.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="example-button-row">
+        <button mat-raised-button color="warn" (click)="onReset()">Reset</button>
+        <button mat-raised-button color="primary" (click)="onBack()">Regresar</button>
+        <button mat-raised-button color="accent" type="submit">Guardar</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</form>

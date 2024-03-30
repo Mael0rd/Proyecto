@@ -18,4 +18,7 @@ export const FormErrorMessage = [
   //new ErrorMessage('categorias', 'required', 'Es requerido que seleccione una categoria'),
   new ErrorMessage('tipoLLanta', 'required', 'Es requerido que indique un tipo de llanta'),
   new ErrorMessage('cilindraje', 'required', 'Es requerido que indique el cilindraje'),
+  new ErrorMessage('provincia', 'required', 'Es requerido que indique la provincia'),
+  new ErrorMessage('canton', 'required', 'Es requerido que indique el canton'),
+  new ErrorMessage('distrito', 'required', 'Es requerido que indique el distrito'),
 ];

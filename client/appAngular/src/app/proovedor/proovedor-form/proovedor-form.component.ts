@@ -3,16 +3,19 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from '../../share/generic.service';
-import { NotificacionService, TipoMessage } from '../../share/notification.service';
+import {
+  NotificacionService,
+  TipoMessage,
+} from '../../share/notification.service';
 import { FormErrorMessage } from '../../form-error-message';
+import { UbicacionService } from '../../share/services/ubicacion.service';
 
 @Component({
   selector: 'app-proovedor-form',
   templateUrl: './proovedor-form.component.html',
-  styleUrl: './proovedor-form.component.css'
+  styleUrl: './proovedor-form.component.css',
 })
 export class ProovedorFormComponent {
-
   destroy$: Subject<boolean> = new Subject<boolean>();
   //Titulo
   titleForm: string = 'Crear';
@@ -34,20 +37,31 @@ export class ProovedorFormComponent {
   //Sí es crear
   isCreate: boolean = true;
 
+  provincias: any[];
+  cantones: any[];
+  distritos: any[];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private activeRouter: ActivatedRoute,
     private gService: GenericService,
-    private noti: NotificacionService
+    private noti: NotificacionService,
+    private ubicacionService: UbicacionService
   ) {
-    this.formularioReactive();
+    //this.formularioReactive();
     //this.listaSubcategoria();
     //this.listaCategoria();
     //this.cambios();
   }
 
   ngOnInit(): void {
+    this.formularioReactive();
+    this.ubicacionService.cargarUbicaciones().subscribe((data) => {
+      this.provincias = data.provincias;
+      //console.log("esto es lo que lleva",data.provincias)
+    });
+
     //Verificar si se envio un id por parametro para crear formulario para actualizar
     this.activeRouter.params.subscribe((params: Params) => {
       this.idProovedor = params['id'];
@@ -67,10 +81,7 @@ export class ProovedorFormComponent {
               nombre: this.proovedorInfo.nombre,
               correo: this.proovedorInfo.correo,
               numeroTelefonico: this.proovedorInfo.numeroTelefonico,
-              //publicar: this.productoInfo.publicar,
-              //generos: this.productoInfo.generos.map(({id})=>id),
               direccionExacta: this.proovedorInfo.direccionExacta,
-              
             });
           });
         //[{id:5, nombre: valor, ..}]
@@ -79,17 +90,22 @@ export class ProovedorFormComponent {
     });
   }
 
-     //Crear Formulario
-   formularioReactive() {
+  //Crear Formulario
+  formularioReactive() {
     //[null, Validators.required]
     this.proovedorForm = this.fb.group({
       //identificador
       id: [null, null],
-      nombre: [ null,Validators.compose([Validators.required, Validators.minLength(2)]),],
+      nombre: [
+        null,
+        Validators.compose([Validators.required, Validators.minLength(2)]),
+      ],
       correo: [null, Validators.required],
       numeroTelefonico: [null, Validators.required],
       direccionExacta: [null, Validators.required],
-     
+      provincia: [null, Validators.required],
+      canton: [null, Validators.required],
+      distrito: [null, Validators.required],
     });
   }
   //mae tengo que revisar esta lista
@@ -122,7 +138,61 @@ export class ProovedorFormComponent {
       return false;
     }
   };
-  
+
+  onProvinciaChange() {
+    const provinciaId = this.proovedorForm.get('provincia').value;
+    const provinciaSeleccionada = this.getProvinciaById(provinciaId);
+
+    if (provinciaSeleccionada && provinciaSeleccionada.cantones) {
+        const cantonKeys = Object.keys(provinciaSeleccionada.cantones).sort((a, b) => a.localeCompare(b));
+
+        // Obtener los cantones ordenados utilizando las claves ordenadas
+        this.cantones = cantonKeys.map(key => provinciaSeleccionada.cantones[key]);
+
+        this.proovedorForm.get('canton').reset(); 
+        this.proovedorForm.get('distrito').reset(); 
+    } else {
+        console.error(
+            'provinciaSeleccionada or provinciaSeleccionada.cantones is undefined'
+        );
+    }
+}
+
+  getProvinciaById(id: number) {
+    const provincia = this.provincias[id];
+    //console.log('log', provincia);
+    return provincia;
+  }
+
+  getCantonById(id: number) {
+    const canton = this.cantones[id];
+    //console.log('log', cantones);
+    return canton;
+  }
+
+onCantonChange() {
+    const cantonSeleccionadoId = this.proovedorForm.get('canton').value;
+    const provinciaId = this.proovedorForm.get('provincia').value;
+    const provinciaSeleccionada = this.getProvinciaById(provinciaId);
+
+    if (provinciaSeleccionada && provinciaSeleccionada.cantones) {
+        const cantonSeleccionado = this.getCantonById(cantonSeleccionadoId);
+
+        if (cantonSeleccionado && cantonSeleccionado.distritos) {
+            this.distritos = Object.values(cantonSeleccionado.distritos);
+        } else {
+            this.distritos = [];
+        }
+        this.proovedorForm.get('distrito').reset(); // Reinicia distrito
+    } else {
+        console.error('provinciaSeleccionada or provinciaSeleccionada.cantones is undefined');
+    }
+}
+
+
+
+
+
   submitProovedor(): void {
     //Establecer submit verdadero
     this.submitted = true;
@@ -132,8 +202,8 @@ export class ProovedorFormComponent {
     }
     //Obtener id Generos del Formulario y Crear arreglo con {id: value}
     //let subcategoriasForm = this.proovedorForm
-      //.get('subcategorias') //puede ser subcategorias***************
-      //.value;
+    //.get('subcategorias') //puede ser subcategorias***************
+    //.value;
     //Asignar valor al formulario
 
     //setValue
@@ -148,7 +218,7 @@ export class ProovedorFormComponent {
         .subscribe((data: any) => {
           //Obtener respuesta
           this.respProducto = data;
-          console.log("esto es lo que lleva",data)
+          console.log('esto es lo que lleva', data);
           this.noti.mensajeRedirect(
             'Crear Producto',
             `Producto creado: ${data.nombre}`,
