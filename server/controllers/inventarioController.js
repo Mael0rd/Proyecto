@@ -34,4 +34,66 @@ module.exports.getById = async (request, response) => {
     },
   });
   response.json(inventario);
+}; 
+
+// Crear un inventario
+module.exports.create = async (request, response, next) => {
+  try {
+    let inventario = request.body; 
+    
+    const createInventario = await prisma.inventario.create({
+      data: {
+        bodegaId: inventario.bodegaId,
+        productoId: inventario.productoId,
+        cantStock: parseInt(inventario.cantStock),
+        cantMin: parseInt(inventario.cantMin),
+        cantMax: parseInt(inventario.cantMax),
+        usuarioregistraId: parseInt(inventario.usuarioregistraId),
+        usuarioActualizaId: parseInt(inventario.usuarioActualizaId),
+      },
+    }); 
+    response.json(createInventario);
+  } catch (error) {
+    next(error);
+  }
 };
+
+
+// Actualizar un inventario
+module.exports.update = async (request, response, next) => {
+  try {
+    let inventario = request.body;
+    let idInventario = parseInt(request.params.id);
+
+    // Obtener inventario viejo
+    const inventarioViejo = await prisma.inventario.findUnique({
+      where: { id: idInventario },
+    });
+ 
+    // Verificar si el inventario existe
+    if (!inventarioViejo) {
+      return response.status(404).json({ error: 'Inventario no encontrado' });
+    } 
+    
+    // Actualizar el inventario
+    const updatedInventario = await prisma.inventario.update({
+      where: {
+        id: idInventario,
+      },
+      data: {
+        bodegaId: inventario.bodegaId,
+        productoId: inventario.productoId,
+        cantStock: parseInt(inventario.cantStock),
+        cantMin: parseInt(inventario.cantMin),
+        cantMax: parseInt(inventario.cantMax),
+        usuarioregistraId: parseInt(inventario.usuarioregistraId),
+        usuarioActualizaId: parseInt(inventario.usuarioActualizaId),
+      },
+    });
+
+    response.json(updatedInventario);
+  } catch (error) {
+    next(error);
+  }
+};
+

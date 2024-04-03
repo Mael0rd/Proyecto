@@ -3,7 +3,9 @@ const prisma = new PrismaClient();
 
 // Obtener Proovedor
 module.exports.get = async (request, response, next) => {
-  const proovedores = await prisma.proovedor.findMany();
+  const proovedores = await prisma.proovedor.findMany({
+    //include: {contacto: true},
+  });
   response.json(proovedores);
 };
 
@@ -27,11 +29,10 @@ module.exports.create = async (request, response, next) => {
         correo: proovedor.correo,
         numeroTelefonico: proovedor.numeroTelefonico,
         direccionExacta: proovedor.direccionExacta,
+        provincia: proovedor.provincia,
+        canton: proovedor.canton,
+        distrito: proovedor.distrito,
 
-        //subCategoria:producto.subCategoria
-        // bodegas: {
-        //   connect: producto.bodegas.map((bodega) => ({ id: bodega })),
-        // },
       },
     });
     response.json(createProovedor);
@@ -57,7 +58,10 @@ module.exports.update = async (request, response, next) => {
         nombre: proovedor.nombre,
         correo: proovedor.correo,
         numeroTelefonico: proovedor.numeroTelefonico,
-        direccionExacta: proovedor.direccionExacta,      
+        direccionExacta: proovedor.direccionExacta,
+        provincia: proovedor.provincia,
+        canton: proovedor.canton,
+        distrito: proovedor.distrito,      
     },
   });
   response.json(newProovedor);

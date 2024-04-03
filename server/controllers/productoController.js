@@ -9,8 +9,8 @@ module.exports.get = async (request, response, next) => {
     },
   });
   response.json(productos);
-};
-
+}; 
+  
 // Crear un producto
 module.exports.create = async (request, response, next) => {
   try {

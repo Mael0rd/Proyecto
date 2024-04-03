@@ -8,7 +8,8 @@ const inventarioController = require("../controllers/inventarioController");
 
 router.get("/:usuarioregistraId", inventarioController.getByUsuario);
 router.get("/detalle/:id", inventarioController.getById);
-
+router.post("/", inventarioController.create);
+router.put('/:id', inventarioController.update)
 
 
 

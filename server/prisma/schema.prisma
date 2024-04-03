@@ -83,13 +83,26 @@ model OrdenOnProducto {
 model Proovedor {
   id               Int           @id @default(autoincrement())
   nombre           String
-  correo           String        
+  correo           String
   numeroTelefonico String
   //Ubicacion
   ubicacionId      Int?          @unique
   ubicacion        Ubicacion?    @relation(fields: [ubicacionId], references: [id])
   direccionExacta  String
   ordenes          OrdenCompra[]
+  provincia        String
+  canton           String
+  distrito         String
+  contactos        Contacto[]
+}
+
+model Contacto {
+  id          Int       @id @default(autoincrement())
+  nombre      String
+  correo      String
+  telefono    String
+  proovedorId Int
+  proovedor   Proovedor @relation(fields: [proovedorId], references: [id])
 }
 
 model Producto {
@@ -106,9 +119,9 @@ model Producto {
   ordenes        OrdenOnProducto[]
   bodegas        Inventario[]
   movimientos    MovimientoOnProducto[]
-  traslados TrasladoOnProducto[]
+  traslados      TrasladoOnProducto[]
 }
- 
+
 model MovimientoOnProducto {
   movimientoId Int
   movimiento   Movimientos @relation(fields: [movimientoId], references: [id])
@@ -121,8 +134,6 @@ model MovimientoOnProducto {
   @@map("MovimientoProducto")
 }
 
-
-
 model Inventario {
   id Int @id @default(autoincrement())
 
@@ -132,12 +143,9 @@ model Inventario {
   productoId Int
   producto   Producto @relation(fields: [productoId], references: [id]) // Corregido el campo a productoId
 
-  //createdAt DateTime @default(now())
-  //updatedAt DateTime @default(now()) @updatedAt
-
   usuarioregistraId  Int
   usuarioActualizaId Int
-
+ 
   usuarioregistra  Usuario? @relation(name: "UsuarioRegistra", fields: [usuarioregistraId], references: [id])
   usuarioActualiza Usuario? @relation(name: "UsuarioActualiza", fields: [usuarioActualizaId], references: [id])
 
@@ -194,11 +202,12 @@ model Movimientos {
 }
 
 model TrasladoOnProducto {
-  cantidad Int
+  cantidad   Int
   productoId Int
-  producto   Producto @relation(fields: [productoId], references: [id])
+  producto   Producto       @relation(fields: [productoId], references: [id])
   trasladoId Int
   traslado   TrasladoBodega @relation(fields: [trasladoId], references: [id])
+
   @@id([trasladoId, productoId])
 }
 
