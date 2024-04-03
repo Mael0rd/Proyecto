@@ -4,17 +4,18 @@
     
   <a
   mat-fab
-  matTooltip="Crear Orden"
-  aria-label="Crear Orden"
+  matTooltip="Crear Inventario"
+  aria-label="Crear Inventario"
   color="primary"
+  (click)="crearInventario()"
   >
   <mat-icon>add</mat-icon>
   
   </a>
   <a
   mat-fab
-  matTooltip="Imrpimir Orden"
-  aria-label="Imprimir Orden"
+  matTooltip="Imrpimir Inventario"
+  aria-label="Imprimir Inventario"
   color="primary"
   >
   <button 
@@ -75,6 +76,16 @@
         (click)="detalleInventario(row.id)"
       >
       <mat-icon class="mat-18">info</mat-icon>
+    </button>
+        <button 
+        mat-mini-fab
+        color="accent"
+        matTooltip="Actualizar Inventario"
+        aria-label="Actualizar Inventario"
+        color="primary"
+        (click)="actualizarInventario(row.id)"
+      >
+      <mat-icon class="mat-18">edit</mat-icon>
     </button>
     
       </td>

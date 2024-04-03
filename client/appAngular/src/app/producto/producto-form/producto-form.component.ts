@@ -87,15 +87,14 @@ export class ProductoFormComponent {
     this.productoForm = this.fb.group({
       //identificador
       id: [null, null],
-      nombre: [ null,Validators.compose([Validators.required, Validators.minLength(2)]),],
-      descripcion: [null, Validators.required],
+      nombre: [ null,Validators.compose([Validators.required, Validators.minLength(5)]),],
+      descripcion: [null, Validators.compose([Validators.required, Validators.minLength(15)]),],
       precio: [null,Validators.compose([Validators.required,Validators.pattern('^[0-9]+[.,]{1,1}[0-9]{2,2}$'),]),],
       cilindraje: [null, Validators.required],
       tipoLLanta: [null, Validators.required],
-      //publicar: [true, Validators.required],
       subcategorias: [null, Validators.required],
       cantidad: [null, null],
-      categorias: [null, null],
+      categorias: [null, Validators.required],
       codigo: [null, null],
 
     });

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class UbicacionService {
 
-  private urlJson = 'assets/data/provincia_canton_distrito_CR.json';
+  //private urlJson = 'assets/data/provincia_canton_distrito_CR.json';
 
   constructor(private http: HttpClient) { }
 

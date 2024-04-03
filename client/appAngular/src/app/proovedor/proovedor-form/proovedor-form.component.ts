@@ -3,10 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from '../../share/generic.service';
-import {
-  NotificacionService,
-  TipoMessage,
-} from '../../share/notification.service';
+import {  NotificacionService,  TipoMessage,} from '../../share/notification.service';
 import { FormErrorMessage } from '../../form-error-message';
 import { UbicacionService } from '../../share/services/ubicacion.service';
 
@@ -49,10 +46,7 @@ export class ProovedorFormComponent {
     private noti: NotificacionService,
     private ubicacionService: UbicacionService
   ) {
-    //this.formularioReactive();
-    //this.listaSubcategoria();
-    //this.listaCategoria();
-    //this.cambios();
+
   }
 
   ngOnInit(): void {
@@ -82,6 +76,9 @@ export class ProovedorFormComponent {
               correo: this.proovedorInfo.correo,
               numeroTelefonico: this.proovedorInfo.numeroTelefonico,
               direccionExacta: this.proovedorInfo.direccionExacta,
+              provincia: this.proovedorInfo.provincia,
+              canton: this.proovedorInfo.canton,
+              distrito: this.proovedorInfo.distrito,
             });
           });
         //[{id:5, nombre: valor, ..}]
@@ -100,9 +97,10 @@ export class ProovedorFormComponent {
         null,
         Validators.compose([Validators.required, Validators.minLength(2)]),
       ],
-      correo: [null, Validators.required],
-      numeroTelefonico: [null, Validators.required],
-      direccionExacta: [null, Validators.required],
+      correo: [null, [Validators.required, Validators.pattern(/^(([^<>()\[\]\.,;:\s@\”]+(\.[^<>()\[\]\.,;:\s@\”]+)*)|(\”.+\”))@(([^<>()[\]\.,;:\s@\”]+\.)+[^<>()[\]\.,;:\s@\”]{2,})$/)]],
+
+      numeroTelefonico: [null, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      direccionExacta: [null, [Validators.required, Validators.minLength(15)]],
       provincia: [null, Validators.required],
       canton: [null, Validators.required],
       distrito: [null, Validators.required],

@@ -27,7 +27,6 @@ export class ProovedorIndexComponent {
     private router:Router,
     private route:ActivatedRoute,
     private gService: GenericService,
-    private dialog: MatDialog,
   ) {}
 
   ngAfterViewInit(): void {

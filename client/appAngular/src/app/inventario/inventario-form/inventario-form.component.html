@@ -1,1 +1,128 @@
-<p>inventario-form works!</p>
+<form [formGroup]="inventarioForm" (ngSubmit)="submitProducto()" novalidate>
+  <input type="hidden" formControlName="id" />
+  <mat-card class="shipping-card, margen-form">
+    <mat-card-header>
+      <mat-card-title>{{titleForm}} Inventario</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+      <div class="row">
+
+        <!-- select de bodega -->
+        <div class="row">
+          <div class="col" *ngIf="bodegaList">
+            <mat-form-field class="full-width">
+              <mat-label>Bodega</mat-label>
+              <mat-select placeholder="Bodega" formControlName="bodegaId">
+                <mat-option *ngFor="let bodega of bodegaList" [value]="bodega.id">
+                  {{ bodega.nombre }}
+                </mat-option>
+              </mat-select>
+              @if (errorHandling('bodegaId')) {
+              <mat-error>
+                {{errorHandling('bodegaId')}}
+              </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- select de Producto -->
+        <mat-form-field class="full-width">
+          <mat-label>Producto</mat-label>
+          <mat-select placeholder="Producto" formControlName="productoId">
+            <mat-option *ngFor="let producto of productoList" [value]="producto.id">
+              {{ producto.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="errorHandling('productoId')">
+            {{ errorHandling('productoId') }}
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+
+      <!-- Linea de cant Stock-->
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Stock</mat-label>
+            <input matInput formControlName="cantStock" placeholder="Cantidad en bodega">
+            @if (errorHandling('cantStock')) {
+            <mat-error>
+              {{errorHandling('cantStock')}}
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Linea de cant Min-->
+        <div class="col">
+          <mat-form-field class="full-width">
+            
+            <mat-label>Cantidad minima</mat-label>
+            <input matInput formControlName="cantMin" placeholder="Cantidad minima">
+            @if (errorHandling('cantMin')) {
+            <mat-error>
+              {{errorHandling('cantMin')}}
+            </mat-error>
+            }
+
+          </mat-form-field>
+        </div>
+
+        <!-- cant MAX-->
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Cantidad Maxima</mat-label>
+            <input matInput formControlName="cantMax" placeholder="Cantidad maxima">
+            @if (errorHandling('cantMax')) {
+            <mat-error>
+              {{errorHandling('cantMax')}}
+            </mat-error>
+            }
+
+          </mat-form-field>
+        </div>
+        <!-- usuario que registra-->
+        <div class="col">
+          <mat-form-field class="full-width" >
+            <mat-label >Usuario que registra </mat-label>
+            <input matInput  formControlName="usuarioregistraId" placeholder="Usuario que registra" >
+            @if (errorHandling('usuarioregistraId')) {
+            <mat-error>
+              {{errorHandling('usuarioregistraId')}}
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Usuario que Actualiza-->
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Usuario que actualiza</mat-label>
+            <input  matInput [readonly]="true" [value]="getUsuarioActualiza().nombre" formControlName="usuarioActualizaId" placeholder="Usuario que actualiza" >
+            @if (errorHandling('usuarioActualizaId')) {
+            <mat-error>
+              {{errorHandling('usuarioActualizaId')}}
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="example-button-row">
+        <button mat-raised-button color="warn" (click)="onReset()">Reset</button>
+        <button mat-raised-button color="primary" (click)="onBack()">Regresar</button>
+        <button mat-raised-button color="accent" type="submit">Guardar</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+  <mat-error *ngIf="inventarioForm.hasError('minGreaterThanMax')">La cantidad mínima debe ser menor que la máxima.</mat-error>
+  <mat-error *ngIf="inventarioForm.hasError('maxLessThanMin')">La cantidad máxima debe ser mayor que la mínima.</mat-error>
+</form>
