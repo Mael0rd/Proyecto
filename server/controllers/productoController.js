@@ -6,6 +6,7 @@ module.exports.get = async (request, response, next) => {
   const productos = await prisma.producto.findMany({
     include: {
       subCategoria: true,
+      bodegas: true,
     },
   });
   response.json(productos);
@@ -42,6 +43,10 @@ module.exports.getById = async (request, response, next) => {
   let id = parseInt(request.params.id);
   const producto = await prisma.producto.findUnique({
     where: { id: id },
+    include: {
+      subCategoria: true,
+      bodegas: true,
+    },
   });
   response.json(producto);
 }; 

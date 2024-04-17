@@ -19,6 +19,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -28,8 +29,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     OrdenUsuarioComponent
   ],
   imports: [
-    CommonModule,
-    OrdenRoutingModule,
+    CommonModule,    
     MatGridListModule,
     MatCardModule,
     MatMenuModule,
@@ -43,7 +43,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
-    MatChipsModule
+    MatChipsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    OrdenRoutingModule,
   ]
 })
 export class OrdenModule { }

@@ -48,7 +48,7 @@ app.use("/producto/", productosRoutes);
 app.use("/inventario/", inventariosRoutes);
 app.use("/proovedor/", proovedoresRoutes);
 
-
+ 
 // Servidor 
 app.listen(port, () => {  
     console.log(`http://localhost:${port}`); 

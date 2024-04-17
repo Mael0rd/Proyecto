@@ -6,8 +6,8 @@ import { OrdenDetailComponent } from './orden-detail/orden-detail.component';
 
 const routes: Routes = [
   { path: 'orden', component: OrdenIndexComponent },
-
-  { path: 'orden/:id', component: OrdenDetailComponent }
+  { path: 'orden/:id', component: OrdenDetailComponent },
+  { path: 'carrito', component: OrdenUsuarioComponent }
 ];
 
 @NgModule({

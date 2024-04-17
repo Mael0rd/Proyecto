@@ -33,15 +33,29 @@
                   >
                     <mat-icon class="mat-18">info</mat-icon>
                   </button>
+
                   <button
                     mat-mini-fab
                     color="accent"
                     matTooltip="Comprar"
                     aria-label="Comprar"
                     color="primary"
+                    (click)="comprar(item.id)"
                   >
                     <mat-icon class="mat-18">add_shopping_cart</mat-icon>
                   </button>
+
+                  <button
+                    mat-mini-fab
+                    color="accent"
+                    matTooltip="Comprar"
+                    aria-label="Comprar"
+                    color="primary"
+                    (click)="editar(item.id)"
+                  >
+                    <mat-icon class="mat-18">create</mat-icon>
+                  </button>
+
                 </mat-card-actions>
               </mat-card>
             </mat-grid-tile>

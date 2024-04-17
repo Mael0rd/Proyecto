@@ -1,0 +1,154 @@
+<mat-card class="box">
+    <mat-card-title>Asustes de Inventario</mat-card-title>
+    <mat-card-content>
+        Fecha: {{fecha | date: 'dd/MM/yyyy'}}
+    </mat-card-content>
+</mat-card>
+
+
+<mat-card class="box">
+    <form [formGroup]="ajustesForm" novalidate>
+        <div class="row">
+
+            <div class="col" *ngIf="bodegaList">
+                <mat-form-field class="full-width">
+                    <mat-label> <mat-icon>account_balance</mat-icon> <strong>Bodega de origen</strong></mat-label>
+                    <mat-select placeholder="Bodega" formControlName="bodegas">
+                        @for (item of bodegaList; track item.id) {
+                        <mat-option [value]="item.id">
+                            {{item.nombre}}
+                        </mat-option>
+                        }
+                    </mat-select>
+                    @if (errorHandling('bodegas')) {
+                    <mat-error>
+                        {{errorHandling('bodegas')}}
+                    </mat-error>
+                    }
+                </mat-form-field>
+            </div>
+
+            <div class="col">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Usuario que actualiza</mat-label>
+                    <input matInput placeholder="" value="Franklin" [readonly]="true">
+                </mat-form-field>
+            </div>
+            
+            <div class="col">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Usuario que registra</mat-label>
+                    <input matInput placeholder="" value="Franklin" [readonly]="true">
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+
+
+
+    <!-- tabla de ajustes -->
+    <mat-card class="box">
+        <mat-card-content *ngIf="dataSource">
+            <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                <ng-container matColumnDef="producto">
+                    <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.product.nombre}}
+                    </mat-cell>
+
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="precio">
+                    <mat-header-cell *matHeaderCellDef> Cantidad disponible </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ calcularCantidadTotal(element.product.bodegas) }}
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef class="footer-total"></mat-footer-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cantidad">
+                    <mat-header-cell *matHeaderCellDef> Cantidad </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-form-field appearance="fill">
+                            <input matInput id="cantidad " 
+                                type="number" 
+                                class="form-control mb-2"
+                                [(ngModel)]="element.cantidad"
+                                (change)="actualizarCantidad(element)" 
+                                pattern="[0-9]*" 
+                                title="Por favor ingrese solo números" 
+                                (keypress)="validarNumeros($event)">
+                        </mat-form-field>
+
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef class="footer-total"> </mat-footer-cell>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="subtotal">
+              <mat-header-cell *matHeaderCellDef> Subtotal </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ element.subtotal | currency }} </mat-cell>
+              <mat-footer-cell *matFooterCellDef class="footer-total">{{total | currency}}</mat-footer-cell>
+            </ng-container> -->
+
+                <ng-container matColumnDef="acciones">
+                    <mat-header-cell *matHeaderCellDef> Acciones</mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <button mat-icon-button (click)="eliminarItem(element)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns" class="header"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+                <mat-footer-row *matFooterRowDef="displayedColumns" class="footer-row"></mat-footer-row>
+            </mat-table>
+
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+            <button mat-flat-button color="accent" (click)="registrarAjuste()">
+                Ajustar
+                <mat-icon>settings</mat-icon>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+    
+    <div class="row">
+        <div class="col" *ngIf="bodegaList">
+            <mat-form-field class="full-width">
+                <mat-label> <mat-icon>account_balance</mat-icon> <strong>Bodega de destino</strong></mat-label>
+                <mat-select placeholder="Bodega" formControlName="bodegas">
+                    @for (item of bodegaList; track item.id) {
+                    <mat-option [value]="item.id">
+                        {{item.nombre}}
+                    </mat-option>
+                    }
+                </mat-select>
+                @if (errorHandling('bodegas')) {
+                <mat-error>
+                    {{errorHandling('bodegas')}}
+                </mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <div class="col">
+            <mat-form-field class="example-full-width">
+                <mat-label>Justificacion </mat-label>
+                <textarea matInput placeholder="Indicar la razon del ajuste"></textarea>
+            </mat-form-field>
+        </div>
+
+        <div class="col">
+            <mat-form-field class="full-width">
+                <mat-label>Tipo de Movimiento</mat-label>
+                <mat-select [(ngModel)]="selectedValue" name="tipo">
+                    @for (tipo of Tipos; track tipo) {
+                    <mat-option [value]="tipo.value">{{tipo.viewValue}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>

@@ -15,9 +15,8 @@
     routerLinkActive="link-active">
     Mantenimientos
   </button>
-  <button mat-menu-item [routerLink]="['#']" routerLinkActive="link-active" >Traslados</button>
-  <button mat-menu-item [routerLink]="['#']" routerLinkActive="link-active" >Salidas de inventario</button>
-  <button mat-menu-item [routerLink]="['#']" routerLinkActive="link-active" >Ajustes de inventario</button>
+
+  <button mat-menu-item [routerLink]="['inventario/ajustes']" routerLinkActive="link-active" >Ajustes de inventario</button>
 
   <mat-menu #menu2="matMenu">
     <button mat-menu-item  [routerLink]="'/producto-table'" [routerLinkActive]="'link-active'">Productos</button>
@@ -31,7 +30,7 @@
   <!--https://material.angular.io/guide/typography-->
   <div class="example-spacer"></div>
   <div class="example-spacer">
-    <button mat-icon-button matBadgeColor="accent" [matBadge]="qtyItems.toString()" [routerLink]="'/orden'" [routerLinkActive]="'link-active'">
+    <button mat-icon-button matBadgeColor="accent" [matBadge]="qtyItems.toString()" [routerLink]="'/carrito'" [routerLinkActive]="'link-active'">
       <mat-icon>shopping_cart</mat-icon>
     </button>
     <!-- Menu de Usuario-->

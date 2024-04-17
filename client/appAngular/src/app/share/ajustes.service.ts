@@ -11,7 +11,7 @@ export class ItemCart {
 @Injectable({
   providedIn: 'root',
 })
-export class CartService {
+export class AjustesService {
   private cart = new BehaviorSubject<ItemCart[]>(null); //Definimos nuestro BehaviorSubject, este debe tener un valor inicial siempre
   public currentDataCart$ = this.cart.asObservable(); //Tenemos un observable con el valor actual del BehaviorSubject
   public qtyItems = new Subject<number>();
@@ -54,7 +54,7 @@ export class CartService {
     return;
     } else {
     //Actualizar cantidad
-    listCart[objIndex].cantidad = producto.cantidad;
+    listCart[objIndex].cantidad  = producto.cantidad;
     }
     } else {
     //Actualizar la cantidad de un producto existente

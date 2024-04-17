@@ -166,7 +166,7 @@ const prisma = new PrismaClient();
   });
 
 
-  //ordenes´// en la base sale como Orden
+  //#region ordenes
   //orden 1
   await prisma.ordenCompra.create({
     data: {
@@ -248,7 +248,7 @@ const prisma = new PrismaClient();
     include: { productos: true },
   });
 };
-
+//#endregion
 main()
   .then(async () => {
     await prisma.$disconnect();

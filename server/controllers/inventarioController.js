@@ -74,7 +74,7 @@ module.exports.update = async (request, response, next) => {
     if (!inventarioViejo) {
       return response.status(404).json({ error: 'Inventario no encontrado' });
     } 
-    
+     
     // Actualizar el inventario
     const updatedInventario = await prisma.inventario.update({
       where: {
@@ -88,7 +88,7 @@ module.exports.update = async (request, response, next) => {
         cantMax: parseInt(inventario.cantMax),
         usuarioregistraId: parseInt(inventario.usuarioregistraId),
         usuarioActualizaId: parseInt(inventario.usuarioActualizaId),
-      },
+      }, 
     });
 
     response.json(updatedInventario);

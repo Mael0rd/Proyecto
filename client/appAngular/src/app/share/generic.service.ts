@@ -40,6 +40,11 @@ export class GenericService {
     );
   }
 
+  // Obtener
+  getGrafico(endopoint: string): Observable<any | any[]> {
+    return this.http.get<any | any[]>(this.urlAPI + endopoint );
+  }
+
   // Listar ordenes por usuario
   listPorUsuario(endopoint: string, usuarioId: number): Observable<any> {
     return this.http.get<any>(`${this.urlAPI}${endopoint}/${usuarioId}`);

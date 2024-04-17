@@ -172,6 +172,7 @@ export class ProductoFormComponent {
       return;
     }
     const productoFormValueWithoutId = omit(this.productoForm.value, ['id']);
+    
     //Obtener id Generos del Formulario y Crear arreglo con {id: value}
     let subcategoriasForm = this.productoForm
       .get('subcategorias') //puede ser subcategorias***************

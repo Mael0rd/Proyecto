@@ -23,17 +23,20 @@ export class NotificacionService {
     this.options.positionClass = 'toast-top-right';
     //Tiempo que se presenta el mensaje
      //this.options.timeOut = 5000;
-    this.options.disableTimeOut = true;
+    this.options.disableTimeOut = false;
     this.options.closeButton = true;
+    this.options.timeOut = 5000;
+    this.options.tapToDismiss =true;
   }
   /*
 Presentar mensaje de notificación
 Toast Type: success, info, warning, error
  */
   public mensaje(titulo: string, mensaje: string, tipo:TipoMessage) {
-    this.toastr.show(mensaje, titulo, this.options, 'toast-'+TipoMessage[tipo]);
+    this.toastr.show(mensaje, titulo, this.options, 'toast-'+TipoMessage[tipo] );
  
   }
+
   public mensajeRedirect(titulo: string, mensaje: string, tipo:TipoMessage, url: string) {
     this.toastr
       .show(mensaje, titulo, this.options, 'toast-'+TipoMessage[tipo])

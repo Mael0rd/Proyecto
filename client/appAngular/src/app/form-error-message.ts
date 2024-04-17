@@ -17,6 +17,8 @@ export const FormErrorMessage = [
   new ErrorMessage('precio', 'required', 'El precio es requerido'),
   new ErrorMessage('precio', 'pattern', 'El precio solo acepta números con dos decimales'),
   new ErrorMessage('subcategorias', 'required', 'Es requerido que seleccione una subcategoria'),
+  new ErrorMessage('bodegas', 'required', 'Es requerido que seleccione una bodega'),
+  new ErrorMessage('proovedores', 'required', 'Es requerido que seleccione un proovedor'),
   //new ErrorMessage('categorias', 'required', 'Es requerido que seleccione una categoria'),
   new ErrorMessage('tipoLLanta', 'required', 'Es requerido que indique un tipo de llanta'),
   new ErrorMessage('cilindraje', 'required', 'Es requerido que indique el cilindraje'),

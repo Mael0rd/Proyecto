@@ -4,11 +4,16 @@ import { InventarioIndexComponent } from './inventario-index/inventario-index.co
 //import { InventarioUserComponent } from './inventario-user/inventario-user.component';
 import { InventarioDetailComponent } from './inventario-detail/inventario-detail.component';
 import { InventarioFormComponent } from './inventario-form/inventario-form.component';
+import { InventarioAjustesComponent } from './inventario-ajustes/inventario-ajustes.component';
 
 const routes: Routes = [
   {
     path: 'inventario/create',
     component: InventarioFormComponent,
+  },
+  {
+    path: 'inventario/ajustes',
+    component: InventarioAjustesComponent,
   },
   {
     path: 'inventario/:usuarioregistraId',

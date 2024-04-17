@@ -20,7 +20,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { InventarioUserComponent } from './inventario-user/inventario-user.component';
 import { InventarioFormComponent } from './inventario-form/inventario-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InventarioAjustesComponent } from './inventario-ajustes/inventario-ajustes.component';
 
 
 @NgModule({
@@ -28,11 +29,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     InventarioIndexComponent,
     InventarioDetailComponent,
     InventarioUserComponent,
-    InventarioFormComponent
+    InventarioFormComponent,
+    InventarioAjustesComponent
   ],
   imports: [
     CommonModule,
-    InventarioRoutingModule,
     MatGridListModule,
     MatCardModule,
     MatMenuModule,
@@ -47,7 +48,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatSelectModule,
     MatRadioModule,
     MatChipsModule,
+    FormsModule, 
     ReactiveFormsModule,
+    InventarioRoutingModule
     
   ]
 })
